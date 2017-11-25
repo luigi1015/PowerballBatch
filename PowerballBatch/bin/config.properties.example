@@ -1,0 +1,6 @@
+# config.properties is a properties file for sensitive configuration data such as usernames and passwords.
+# This file is an example that can be copied to config.properties in this directory and modified with real data.
+spring.datasource.url=jdbc:mysql://url/database
+spring.datasource.username=username
+spring.datasource.password=password
+spring.datasource.driver-class-name=driver
