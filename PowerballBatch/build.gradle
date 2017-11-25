@@ -29,7 +29,6 @@ ext {
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-batch')
-	compile('org.springframework.cloud:spring-cloud-starter-aws-jdbc')
 	compile('org.springframework.boot:spring-boot-starter-mail')
 	runtime('mysql:mysql-connector-java')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
