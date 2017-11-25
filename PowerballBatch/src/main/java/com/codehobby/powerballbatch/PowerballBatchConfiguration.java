@@ -20,6 +20,7 @@ import org.springframework.batch.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
+import org.springframework.batch.item.file.mapping.PassThroughLineMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -44,22 +45,29 @@ public class PowerballBatchConfiguration
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PowerballBatchConfiguration.class);
 	
+	//public FlatFileItemReader<PowerballDrawing> reader() throws MalformedURLException
 	@Bean
-	public FlatFileItemReader<PowerballDrawing> reader()
+	public FlatFileItemReader<String> reader() throws MalformedURLException
 	{
-		FlatFileItemReader<PowerballDrawing> reader = new FlatFileItemReader<PowerballDrawing>();
+		//FlatFileItemReader<PowerballDrawing> reader = new FlatFileItemReader<PowerballDrawing>();
+		FlatFileItemReader<String> reader = new FlatFileItemReader<String>();
+		//String powerballURL = "http://www.powerball.com/powerball/winnums-text.txt";
 		String powerballURL = "http://www.powerball.com/powerball/winnums-text.txt";
 		try
 		{
 			//Trying UrlResource instead of ClassPathResource in the Spring example.
-			reader.setResource( new UrlResource(new URL(powerballURL)) );
-		} catch (MalformedURLException e) {
-			LOGGER.error( "Malformed URL exception: " + e.getMessage() );
+			URL pbURL = new URL(powerballURL);
+			UrlResource pbURLResource = new UrlResource(pbURL);
+			reader.setResource( pbURLResource );
+		} catch( MalformedURLException mue ) {
+			LOGGER.error( "Malformed URL exception: " + mue.getMessage() );
 			LOGGER.error( "URL: \"" + powerballURL + "\"" );
-			LOGGER.error( Arrays.toString(e.getStackTrace()) );
+			LOGGER.error( Arrays.toString(mue.getStackTrace()) );
+			throw mue;
 		}
+		/*
 		reader.setLineMapper(new DefaultLineMapper<PowerballDrawing>() {{
-			setLineTokenizer( new DelimitedLineTokenizer() {{
+			setLineTokenizer( new DelimitedLineTokenizer("  ") {{
 				setNames( new String[] {"date", 
 						"whiteBallOne", 
 						"whiteBallTwo", 
@@ -73,6 +81,8 @@ public class PowerballBatchConfiguration
 				}});
 			}});
 		}});
+		*/
+		reader.setLineMapper( new PassThroughLineMapper() );
 		return reader;
 	}
 
@@ -89,22 +99,36 @@ public class PowerballBatchConfiguration
 	}
 
 	@Bean
-	public Job importDrawingJob(JobCompletionNotificationListener listener)
+	public DrawingItemProcessor processor()
+	{
+		return new DrawingItemProcessor();
+	}
+
+	@Bean
+	public Job importDrawingJob(JobCompletionNotificationListener listener) throws MalformedURLException
 	{
 		return jobBuilderFactory.get("importDrawingJob")
 				.incrementer(new RunIdIncrementer())
 				.listener(listener)
-				.flow(step1())
+				.flow(importDrawingInfoStep())
 				.end()
 				.build();
 	}
 
 	@Bean
-	public Step step1()
+	public Step importDrawingInfoStep() throws MalformedURLException
 	{
-		return stepBuilderFactory.get("step1")
+		/*
+		return stepBuilderFactory.get("Import Powerball Drawings Info Step")
 				.<PowerballDrawing, PowerballDrawing> chunk(10)
 				.reader(reader())
+				.writer(writer())
+				.build();
+		*/
+		return stepBuilderFactory.get("Import Powerball Drawings Info Step")
+				.<String, PowerballDrawing> chunk(10)
+				.reader(reader())
+				.processor(processor())
 				.writer(writer())
 				.build();
 	}

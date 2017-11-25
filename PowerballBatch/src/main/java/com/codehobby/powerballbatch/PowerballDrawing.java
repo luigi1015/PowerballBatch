@@ -4,13 +4,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class PowerballDrawing
 {
-	private Calendar drawDate;
+	private Calendar drawDate = new GregorianCalendar();
 	private String drawDatePattern = "MM/dd/yyyy";
 	private SimpleDateFormat drawDateFormat = new SimpleDateFormat(drawDatePattern);
 	private byte[] whiteBalls = new byte[5];
