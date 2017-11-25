@@ -45,13 +45,10 @@ public class PowerballBatchConfiguration
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PowerballBatchConfiguration.class);
 	
-	//public FlatFileItemReader<PowerballDrawing> reader() throws MalformedURLException
 	@Bean
 	public FlatFileItemReader<String> reader() throws MalformedURLException
 	{
-		//FlatFileItemReader<PowerballDrawing> reader = new FlatFileItemReader<PowerballDrawing>();
 		FlatFileItemReader<String> reader = new FlatFileItemReader<String>();
-		//String powerballURL = "http://www.powerball.com/powerball/winnums-text.txt";
 		String powerballURL = "http://www.powerball.com/powerball/winnums-text.txt";
 		try
 		{
@@ -65,23 +62,6 @@ public class PowerballBatchConfiguration
 			LOGGER.error( Arrays.toString(mue.getStackTrace()) );
 			throw mue;
 		}
-		/*
-		reader.setLineMapper(new DefaultLineMapper<PowerballDrawing>() {{
-			setLineTokenizer( new DelimitedLineTokenizer("  ") {{
-				setNames( new String[] {"date", 
-						"whiteBallOne", 
-						"whiteBallTwo", 
-						"whiteBallThree", 
-						"whiteBallFour", 
-						"whiteBallFive",
-						"powerball",
-						"powerPlay"});
-				setFieldSetMapper( new BeanWrapperFieldSetMapper<PowerballDrawing>() {{
-					setTargetType( PowerballDrawing.class );
-				}});
-			}});
-		}});
-		*/
 		reader.setLineMapper( new PassThroughLineMapper() );
 		return reader;
 	}
@@ -118,13 +98,6 @@ public class PowerballBatchConfiguration
 	@Bean
 	public Step importDrawingInfoStep() throws MalformedURLException
 	{
-		/*
-		return stepBuilderFactory.get("Import Powerball Drawings Info Step")
-				.<PowerballDrawing, PowerballDrawing> chunk(10)
-				.reader(reader())
-				.writer(writer())
-				.build();
-		*/
 		return stepBuilderFactory.get("Import Powerball Drawings Info Step")
 				.<String, PowerballDrawing> chunk(10)
 				.reader(reader())
