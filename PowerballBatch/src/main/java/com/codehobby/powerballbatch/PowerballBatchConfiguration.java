@@ -18,15 +18,13 @@ import org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourc
 import org.springframework.batch.item.database.ItemPreparedStatementSetter;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.item.file.FlatFileItemReader;
-import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
-import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.mapping.PassThroughLineMapper;
-import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 @Configuration
 @EnableBatchProcessing
@@ -71,7 +69,7 @@ public class PowerballBatchConfiguration
 	{
 		JdbcBatchItemWriter<PowerballDrawing> writer = new JdbcBatchItemWriter<PowerballDrawing>();
 		writer.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<PowerballDrawing>());
-		writer.setSql("insert into Users values(?, ?, ?, ?, ?, ?, ?, ?);");
+		writer.setSql("CALL InsertPowerballDrawing( ?, ?, ?, ?, ?, ?, ?, ?);");
 		writer.setDataSource(datasource);
 		ItemPreparedStatementSetter<PowerballDrawing> pbSetter = new PowerballDrawingPreparedStatementSetter();
 		writer.setItemPreparedStatementSetter(pbSetter);

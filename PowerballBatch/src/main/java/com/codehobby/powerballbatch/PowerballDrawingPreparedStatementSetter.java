@@ -16,6 +16,13 @@ public class PowerballDrawingPreparedStatementSetter implements ItemPreparedStat
 		preparedStatement.setInt( 5, pbdrawing.getWhiteBallFour() );
 		preparedStatement.setInt( 6, pbdrawing.getWhiteBallFive() );
 		preparedStatement.setInt( 7, pbdrawing.getPowerball() );
-		preparedStatement.setInt( 8, pbdrawing.getPowerPlay() );
+		if( pbdrawing.hasPowerPlay() )
+		{
+			preparedStatement.setInt( 8, pbdrawing.getPowerPlay() );
+		}
+		else
+		{
+			preparedStatement.setInt( 8, 0 );
+		}
 	}
 }

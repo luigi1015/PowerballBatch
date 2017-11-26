@@ -18,6 +18,7 @@ public class PowerballDrawing
 	private byte powerball;
 	private byte powerPlay;
 	private static final Logger LOGGER = LoggerFactory.getLogger(PowerballDrawing.class);
+	private boolean isPowerPlaySet = false;
 
 	public PowerballDrawing()
 	{
@@ -62,7 +63,7 @@ public class PowerballDrawing
 
 	public String getDateString()
 	{
-		SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		return dateFormat.format(drawDate.getTime());
 	}
 
@@ -73,7 +74,7 @@ public class PowerballDrawing
 			whiteBalls[0] = Byte.parseByte( newWhiteBallOne );
 		} catch( NumberFormatException nfe ) {
 			LOGGER.error( "Number format exception in PowerballDrawing: " + nfe.getMessage() );
-			LOGGER.error( "Trying to process newWhiteBallOne: \"" + newWhiteBallOne + "\" " );
+			LOGGER.error( "Trying to process White Ball One: \"" + newWhiteBallOne + "\" " );
 			LOGGER.error( "Stack Trace: " );
 			LOGGER.error( Arrays.toString(nfe.getStackTrace()) );
 		}
@@ -91,7 +92,7 @@ public class PowerballDrawing
 			whiteBalls[1] = Byte.parseByte( newWhiteBallTwo );
 		} catch( NumberFormatException nfe ) {
 			LOGGER.error( "Number format exception in PowerballDrawing: " + nfe.getMessage() );
-			LOGGER.error( "Trying to process newWhiteBallTwo: \"" + newWhiteBallTwo + "\" " );
+			LOGGER.error( "Trying to process White Ball Two: \"" + newWhiteBallTwo + "\" " );
 			LOGGER.error( "Stack Trace: " );
 			LOGGER.error( Arrays.toString(nfe.getStackTrace()) );
 		}
@@ -109,7 +110,7 @@ public class PowerballDrawing
 			whiteBalls[2] = Byte.parseByte( newWhiteBallThree );
 		} catch( NumberFormatException nfe ) {
 			LOGGER.error( "Number format exception in PowerballDrawing: " + nfe.getMessage() );
-			LOGGER.error( "Trying to process newWhiteBallThree: \"" + newWhiteBallThree + "\" " );
+			LOGGER.error( "Trying to process White Ball Three: \"" + newWhiteBallThree + "\" " );
 			LOGGER.error( "Stack Trace: " );
 			LOGGER.error( Arrays.toString(nfe.getStackTrace()) );
 		}
@@ -127,7 +128,7 @@ public class PowerballDrawing
 			whiteBalls[3] = Byte.parseByte( newWhiteBallFour );
 		} catch( NumberFormatException nfe ) {
 			LOGGER.error( "Number format exception in PowerballDrawing: " + nfe.getMessage() );
-			LOGGER.error( "Trying to process newWhiteBallFour: \"" + newWhiteBallFour + "\" " );
+			LOGGER.error( "Trying to process White Ball Four: \"" + newWhiteBallFour + "\" " );
 			LOGGER.error( "Stack Trace: " );
 			LOGGER.error( Arrays.toString(nfe.getStackTrace()) );
 		}
@@ -145,7 +146,7 @@ public class PowerballDrawing
 			whiteBalls[4] = Byte.parseByte( newWhiteBallFive );
 		} catch( NumberFormatException nfe ) {
 			LOGGER.error( "Number format exception in PowerballDrawing: " + nfe.getMessage() );
-			LOGGER.error( "Trying to process newWhiteBallFive: \"" + newWhiteBallFive + "\" " );
+			LOGGER.error( "Trying to process White Ball Five: \"" + newWhiteBallFive + "\" " );
 			LOGGER.error( "Stack Trace: " );
 			LOGGER.error( Arrays.toString(nfe.getStackTrace()) );
 		}
@@ -163,7 +164,7 @@ public class PowerballDrawing
 			powerball = Byte.parseByte( newPowerball );
 		} catch( NumberFormatException nfe ) {
 			LOGGER.error( "Number format exception in PowerballDrawing: " + nfe.getMessage() );
-			LOGGER.error( "Trying to process newPowerball: \"" + newPowerball + "\" " );
+			LOGGER.error( "Trying to process Powerball: \"" + newPowerball + "\" " );
 			LOGGER.error( "Stack Trace: " );
 			LOGGER.error( Arrays.toString(nfe.getStackTrace()) );
 		}
@@ -176,19 +177,33 @@ public class PowerballDrawing
 
 	public void setPowerPlay( String newPowerPlay )
 	{
-		try
+		if( newPowerPlay != null && !"".equals(newPowerPlay))
 		{
-			powerPlay = Byte.parseByte( newPowerPlay );
-		} catch( NumberFormatException nfe ) {
-			LOGGER.error( "Number format exception in PowerballDrawing: " + nfe.getMessage() );
-			LOGGER.error( "Trying to process newPowerPlay: \"" + newPowerPlay + "\" " );
-			LOGGER.error( "Stack Trace: " );
-			LOGGER.error( Arrays.toString(nfe.getStackTrace()) );
+			isPowerPlaySet = true;
+			try
+			{
+				powerPlay = Byte.parseByte( newPowerPlay );
+			} catch( NumberFormatException nfe ) {
+				LOGGER.error( "Number format exception in PowerballDrawing: " + nfe.getMessage() );
+				LOGGER.error( "Trying to process Power Play: \"" + newPowerPlay + "\" " );
+				LOGGER.error( "Stack Trace: " );
+				LOGGER.error( Arrays.toString(nfe.getStackTrace()) );
+			}
+		}
+		else
+		{
+			isPowerPlaySet = false;
+			powerPlay = 0;
 		}
 	}
 
 	public byte getPowerPlay()
 	{
 		return powerPlay;
+	}
+
+	public boolean hasPowerPlay()
+	{
+		return isPowerPlaySet;
 	}
 }

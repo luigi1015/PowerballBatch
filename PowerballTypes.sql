@@ -22,3 +22,12 @@ INSERT INTO `PowerballTypes` (`TypeID`, `Description`) VALUES
 (2, 'Powerball'),
 (3, 'Power Play');
 
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `PowerballTypes`
+--
+ALTER TABLE `PowerballTypes`
+ ADD PRIMARY KEY (`TypeID`);

@@ -10,7 +10,6 @@ public class DrawingItemProcessor implements ItemProcessor<String, PowerballDraw
 
 	public PowerballDrawing process( final String pbDrawingLine )
 	{
-		LOGGER.info( "Processing line: " + pbDrawingLine );
 		if( pbDrawingLine.startsWith("Draw Date") )
 		{
 			return null;
@@ -37,7 +36,7 @@ public class DrawingItemProcessor implements ItemProcessor<String, PowerballDraw
 				pbdLine.setWhiteBallFour( tokens[4] );
 				pbdLine.setWhiteBallFive( tokens[5] );
 				pbdLine.setPowerball( tokens[6] );
-				if( tokens.length >= 8 )
+				if( tokens.length >= 8 && !"".equals(tokens[7]) )
 				{
 					pbdLine.setPowerPlay( tokens[7] );
 				}
